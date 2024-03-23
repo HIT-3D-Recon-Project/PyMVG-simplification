@@ -15,7 +15,7 @@
 #include "openMVG/matching_image_collection/Matcher_Regions.hpp" // 区域匹配器
 #include "openMVG/matching_image_collection/Pair_Builder.hpp" // 对构建器
 #include "openMVG/sfm/pipelines/sfm_features_provider.hpp" // SFM特征提供者
-#include "openMVG/sfm/pipelines/sfm_preemptive_regions_provider.hpp" // SFM先发制人区域提供者
+#include "openMVG/sfm/pipelines/sfm_preemptive_regions_provider.hpp" // SFM先抢占区域提供者
 #include "openMVG/sfm/pipelines/sfm_regions_provider.hpp" // SFM区域提供者
 #include "openMVG/sfm/pipelines/sfm_regions_provider_cache.hpp" // SFM区域提供者缓存
 #include "openMVG/sfm/sfm_data.hpp" // SFM数据
@@ -309,7 +309,7 @@ int main( int argc, char** argv )
       // 对假定对进行光度匹配
       collectionMatcher->Match( regions_provider, pairs, map_PutativeMatches, &progress );
 
-      if (cmd.used('P')) // 先发制人筛选
+      if (cmd.used('P')) // 抢占式筛选
       {
         // 仅当匹配数超过X时保留假定匹配
         PairWiseMatches map_filtered_matches;
