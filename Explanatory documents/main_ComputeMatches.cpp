@@ -51,9 +51,9 @@ int main( int argc, char** argv )
   bool         bForce                 = false; // 强制重新计算标志
   unsigned int ui_max_cache_size      = 0; // 最大缓存大小
 
-  // 先发制人匹配参数
-  unsigned int ui_preemptive_feature_count = 200; // 先发制人特征数
-  double preemptive_matching_percentage_threshold = 0.08; // 先发制人匹配百分比阈值
+  // 抢占式匹配参数
+  unsigned int ui_preemptive_feature_count = 200; // 抢占式特征数
+  double preemptive_matching_percentage_threshold = 0.08; // 抢占式匹配百分比阈值
 
   // 必需的命令行参数
   cmd.add( make_option( 'i', sSfM_Data_Filename, "input_file" ) );
@@ -180,7 +180,7 @@ int main( int argc, char** argv )
     // 缓存区域提供者（按需加载并存储区域）
     regions_provider = std::make_shared<Regions_Provider_Cache>(ui_max_cache_size);
   }
-  // 如果我们使用先发制人匹配，我们会加载更少的区域：
+  // 如果我们使用抢占式匹配，我们会加载更少的区域：
   if (ui_preemptive_feature_count > 0 && cmd.used('P'))
   {
     regions_provider = std::make_shared<Preemptive_Regions_Provider>(ui_preemptive_feature_count);
