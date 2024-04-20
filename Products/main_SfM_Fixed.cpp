@@ -263,17 +263,17 @@ int main(int argc, char **argv)
   EGraphSimplification graph_simplification_method;
   // Check validity of command line parameters:
   
-  if ( !isValid_ETriangulationMethod(static_cast<ETriangulationMethod>(triangulation_method))
-        || !isValid_EINTRINSIC(openMVG::cameras::EINTRINSIC(user_camera_model)) 
-        || !isValid_Intrinsic_Parameter_Type(intrinsic_refinement_options,static_cast<cameras::Intrinsic_Parameter_Type>(0)) 
-        || !isValid_Extrinsic_Parameter_Type(extrinsic_refinement_options,static_cast<sfm::Extrinsic_Parameter_Type>(0)) 
-        || !isValid_SfM_Initializer_Option(StringToEnum(sfm_initializer_method, scene_initializer_enum))
-        || !isValid_SfM_Engine_Type(StringToEnum(engine_name, sfm_engine_type))
-        || !isValid_ERotationAveragingMethod(rotation_averaging_method) 
-        || !isValid_ETranslationAveragingMethod(translation_averaging_method)
-        || !isValid_EGraphSimplification(StringToEnum_EGraphSimplification(graph_simplification, graph_simplification_method))
-        || !isValid_Graph_Simplification_Value(graph_simplification_value)
-        || !isValid_Output_Directory(directory_output.empty()))return EXIT_FAILURE;
+  if ( !isValid_ETriangulationMethod(static_cast<ETriangulationMethod>(triangulation_method)).cast<bool>()
+        || !isValid_EINTRINSIC(openMVG::cameras::EINTRINSIC(user_camera_model)).cast<bool>()
+        || !isValid_Intrinsic_Parameter_Type(intrinsic_refinement_options,static_cast<cameras::Intrinsic_Parameter_Type>(0)).cast<bool>() 
+        || !isValid_Extrinsic_Parameter_Type(extrinsic_refinement_options,static_cast<sfm::Extrinsic_Parameter_Type>(0)).cast<bool>() 
+        || !isValid_SfM_Initializer_Option(StringToEnum(sfm_initializer_method, scene_initializer_enum)).cast<bool>()
+        || !isValid_SfM_Engine_Type(StringToEnum(engine_name, sfm_engine_type)).cast<bool>()
+        || !isValid_ERotationAveragingMethod(rotation_averaging_method).cast<bool>() 
+        || !isValid_ETranslationAveragingMethod(translation_averaging_method).cast<bool>()
+        || !isValid_EGraphSimplification(StringToEnum_EGraphSimplification(graph_simplification, graph_simplification_method)).cast<bool>()
+        || !isValid_Graph_Simplification_Value(graph_simplification_value).cast<bool>()
+        || !isValid_Output_Directory(directory_output.empty()).cast<bool>())return EXIT_FAILURE;
 
 #ifndef USE_PATENTED_LIGT
   if (translation_averaging_method == TRANSLATION_LIGT) {
