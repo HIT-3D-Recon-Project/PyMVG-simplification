@@ -72,10 +72,10 @@ int main(int argc, char** argv)
     py::scoped_interpreter guard{};
 
     auto main_GeometricFilter_Module = py::module_::import("main_GeometricFilter");
-    auto print_usage = main_SfM_Fixed_Module.attr("print_usage");
-    auto print_usage_info = main_SfM_Fixed_Module.attr("print_usage_info");
-    auto get_geometric_model = main_SfM_Fixed_Module.attr("get_geometric_model");
-    auto create_and_export_graph = main_SfM_Fixed_Module.attr("create_and_export_graph");
+ auto print_usage = main_GeometricFilter_Module.attr("print_usage");
+ auto print_usage_info = main_GeometricFilter_Module.attr("print_usage_info");
+ auto get_geometric_model = main_GeometricFilter_Module.attr("get_geometric_model");
+ auto create_and_export_graph = main_GeometricFilter_Module.attr("create_and_export_graph");
     CmdLine cmd;
 
     // The scene
