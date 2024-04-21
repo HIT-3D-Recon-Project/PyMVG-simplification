@@ -22,6 +22,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include <pybind11/stl.h>
 //标准库头文件
 
 namespace py = pybind11;
@@ -74,7 +75,7 @@ int main(int argc, char **argv)
   auto files_name = python_code.attr("files_name");
   auto help_log = python_code.attr("help_log");
 
-  std::string sImageDir, sfileDatabase = "", sOutputDir = ""
+  std::string sImageDir, sfileDatabase = "", sOutputDir = "";
 
   std::string sPriorWeights = "1.0;1.0;1.0";
   std::pair<bool, Vec3> prior_w_info(false, Vec3());
@@ -86,9 +87,18 @@ int main(int argc, char **argv)
   double focal_pixels = -1.0;
   double sensorSize = 0.0;
 
-  sImageDir = read_input();
-  sfileDatabase = read_datafile();
-  sOutputDir = read_output();
+  auto ImageDir = read_input();
+  auto fileDatabase = read_datafile();
+  auto OutputDir = read_output();
+
+  sImageDir = py::str(ImageDir).cast<std::string>();
+  sfileDatabase = py::str(fileDatabase).cast<std::string>();
+  sOutputDir = py::str(OutputDir).cast<std::string>();
+
+  if (sImageDir == "ERROR" || sfileDatabase == "ERROR" || sOutputDir == "ERROR") {
+      // 处理错误情况
+      return EXIT_FAILURE;
+  }
   
   //此处应有异常处理，怀疑不会输出……
   OPENMVG_LOG_INFO << "Usage: " << argv[0] << '\n'
@@ -122,7 +132,8 @@ int main(int argc, char **argv)
   }
   
   //存图像名字到向量vec_image并排序
-  std::vector<std::string> vec_image = files_name(sImageDir);
+  py::object result = files_name(sImageDir); // 调用Python函数并获取结果
+  std::vector<std::string> vec_image = py::cast<std::vector<std::string>>(result); // 转换结果
 
   SfM_Data sfm_data;
   sfm_data.s_root_path = sImageDir; // Setup main image root_path
@@ -191,10 +202,11 @@ int main(int argc, char **argv)
             //品牌模型字符串
           const std::string sCamModel = exifReader->getBrand() + " " + exifReader->getModel();
 
-          if (sensorSize = search_size(sCamModel, sfileDatabase))
+          if (py::object size = search_size(sCamModel, sfileDatabase))
           {
             //focal = max(w, h) * F / S,其中F为相机焦距长度(focal length，单位毫米mm)，w, h为图片的宽高，S为ccd传感器孔径（sensor size，单位mm）
             //算出来*以像素为单位的*焦距
+            sensorSize = py::cast<double>(size);
             const double ccdw = sensorSize;
             focal = std::max ( width, height ) * exifReader->getFocal() / ccdw;
           }

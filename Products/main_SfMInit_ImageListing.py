@@ -1,51 +1,47 @@
 import argparse
 import os
+import argparse
 EXIT_FAILURE = 0
 
 def read_datafile():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d' , '--database', help = 'the sensor width database PATH')
-    
+    parser.add_argument('-d', '--database', help='the sensor width database PATH')
     args = parser.parse_args()
     datafile = args.database
 
-    if(os.path.exists(datafile)):
+    if not os.path.exists(datafile):
         print("The data file doesn't exist")
-        return EXIT_FAILURE
+        return "ERROR"
     else:
         return datafile
 
 def read_input():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i' , '--input', help = 'the images PATH')
-
+    parser.add_argument('-i', '--input', help='the images PATH')
     args = parser.parse_args()
     imgdir = args.input
-    
-    if(os.path.exists(imgdir)):
+
+    if not os.path.exists(imgdir):
         print("The input directory doesn't exist")
-        return EXIT_FAILURE
+        return "ERROR"
     else:
         return imgdir
 
 def read_output():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-o' , '--output', help = 'the output PATH')
-
+    parser.add_argument('-o', '--output', help='the output PATH')
     args = parser.parse_args()
     outdir = args.output
 
-    try:
-        if not os.path.exists(outdir):
-            raise Exception("The output directory doesn't exist, try create a new one")   #不是，在这里raise有用吗，应该扔到log去
-        else:
+    if not os.path.exists(outdir):
+        try:
+            os.makedirs(outdir)
             return outdir
-    except Exception as e:
-        if not os.makedirs(outdir):
-            print("Invalid path: cannot create output directory")   #那就再试试print（
-            return EXIT_FAILURE
-        else:
-            return outdir
+        except Exception as e:
+            print("Invalid path: cannot create output directory")
+            return "ERROR"
+    else:
+        return outdir
 
 def search_size(model, datadir):
     database = open(datadir, 'r')
